@@ -1,0 +1,34 @@
+{
+  "displayName": "goal-a-daily — task attempt FAILED",
+  "documentation": {
+    "content": "The daily pipeline job failed a task attempt. This alert watches the INFRASTRUCTURE, not the app: it fires even when the run never got far enough to reach the database or the ntfy channel (OOM, timeout, crash on start, image pull failure, non-zero exit). That independence is the whole point — the in-app failure nudge cannot report its own delivery path being down. Look at: Cloud Run > Jobs > goal-a-daily > Logs, and the pipeline_runs table for per-stage summaries.",
+    "mimeType": "text/markdown"
+  },
+  "combiner": "OR",
+  "conditions": [
+    {
+      "displayName": "a failed task attempt in the last 5 minutes",
+      "conditionThreshold": {
+        "filter": "resource.type = \"cloud_run_job\" AND resource.labels.job_name = \"goal-a-daily\" AND metric.type = \"run.googleapis.com/job/completed_task_attempt_count\" AND metric.labels.result = \"failed\"",
+        "aggregations": [
+          {
+            "alignmentPeriod": "300s",
+            "perSeriesAligner": "ALIGN_SUM"
+          }
+        ],
+        "comparison": "COMPARISON_GT",
+        "thresholdValue": 0,
+        "duration": "0s",
+        "trigger": {
+          "count": 1
+        }
+      }
+    }
+  ],
+  "alertStrategy": {
+    "autoClose": "86400s"
+  },
+  "notificationChannels": [
+    "projects/goal-a-engine/notificationChannels/8641157315781203271"
+  ]
+}

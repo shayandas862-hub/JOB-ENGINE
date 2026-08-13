@@ -1,0 +1,32 @@
+{
+  "count": 1234,
+  "mean": 72000,
+  "results": [
+    {
+      "id": "4200000001",
+      "title": "Machine Learning Engineer",
+      "description": "We are hiring an ML Engineer to build production models. Snippet only from Adzuna.",
+      "created": "2026-07-09T09:00:00Z",
+      "redirect_url": "https://www.adzuna.co.uk/land/ad/4200000001",
+      "salary_min": 65000,
+      "salary_max": 85000,
+      "salary_is_predicted": "0",
+      "contract_type": "permanent",
+      "contract_time": "full_time",
+      "location": {"display_name": "London, UK", "area": ["UK", "London", "City of London"]},
+      "company": {"display_name": "Acme AI Ltd"},
+      "category": {"label": "IT Jobs", "tag": "it-jobs"}
+    },
+    {
+      "id": "4200000002",
+      "title": "Senior Machine Learning Engineer",
+      "description": "Lead ML work across the platform. Snippet.",
+      "created": "2026-07-08T12:00:00Z",
+      "redirect_url": "https://www.adzuna.co.uk/land/ad/4200000002",
+      "salary_min": 90000,
+      "location": {"display_name": "Manchester, Greater Manchester", "area": ["UK", "North West"]},
+      "company": {"display_name": "Beta Data Ltd"},
+      "category": {"label": "IT Jobs", "tag": "it-jobs"}
+    }
+  ]
+}

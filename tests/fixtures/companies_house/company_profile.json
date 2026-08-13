@@ -1,0 +1,13 @@
+{
+  "company_name": "ACME AI LTD",
+  "company_number": "09876543",
+  "company_status": "active",
+  "type": "ltd",
+  "date_of_creation": "2015-03-01",
+  "sic_codes": ["62012", "62020"],
+  "registered_office_address": {
+    "address_line_1": "1 Silicon Way",
+    "locality": "London",
+    "postal_code": "EC1A 1AA"
+  }
+}

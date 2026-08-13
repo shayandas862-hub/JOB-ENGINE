@@ -1,0 +1,26 @@
+{
+  "project": "goal-a-engine",
+  "code": "GAE",
+  "kinds": {
+    "vision": "V",
+    "decision": "D",
+    "arch-decision": "AD",
+    "progress": "PR",
+    "plan": "P",
+    "working-note": "WN",
+    "addendum": "ADD",
+    "document": "DOC",
+    "bug": "B"
+  },
+  "allocated": {
+    "vision": 8,
+    "decision": 95,
+    "arch-decision": 0,
+    "progress": 0,
+    "plan": 14,
+    "working-note": 0,
+    "addendum": 0,
+    "document": 0,
+    "bug": 50
+  }
+}

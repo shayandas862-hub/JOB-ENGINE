@@ -1,0 +1,23 @@
+{
+  "total": 3,
+  "jobPostings": [
+    {
+      "title": "GSI Client Manager",
+      "externalPath": "/job/UK-Remote/GSI-Client-Manager_JR2015716",
+      "locationsText": "UK, Remote",
+      "postedOn": "Posted 30+ Days Ago",
+      "bulletFields": [
+        "JR2015716"
+      ]
+    },
+    {
+      "title": "Senior Developer Relations Manager \u2013 Financial Services",
+      "externalPath": "/job/UK-Remote/Senior-Developer-Relations-Manager---Capital-Markets_JR2016616-1",
+      "locationsText": "UK, Remote",
+      "postedOn": "Posted 4 Days Ago",
+      "bulletFields": [
+        "JR2016616"
+      ]
+    }
+  ]
+}

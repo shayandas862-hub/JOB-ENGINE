@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "goal-a-engine": {
+      "command": "/path/to/goal-a-engine/.venv/bin/python",
+      "args": ["-m", "mcp_server.server"],
+      "cwd": "/path/to/goal-a-engine",
+      "env": {
+        "PYTHONPATH": "/path/to/goal-a-engine/src"
+      }
+    }
+  }
+}

@@ -1,0 +1,31 @@
+# Belt to the Dockerfile's braces: COPY is already a named allowlist, but if a
+# blanket copy ever sneaks in, nothing here may reach a layer. Secrets first.
+#
+# B-GAE-043: patterns here anchor at the CONTEXT ROOT. `__pycache__/` matched a
+# top-level __pycache__ and NOTHING nested, so `COPY tests/` carried 246 of the
+# laptop's .pyc files into the image with the author's home path baked into
+# every one. Anything that can occur at ANY DEPTH must be written `**/…`; the
+# flat form is correct only for the top-level directories at the bottom of this
+# file. CI images were clean by luck alone — a fresh runner checkout has no
+# caches — so this was invisible in the lane that runs most often.
+.env
+.env.*
+**/.env
+**/.env.*
+.venv/
+.git/
+.claude/
+**/__pycache__
+**/*.pyc
+**/.pytest_cache
+**/.DS_Store
+data/
+docs/
+plans/
+ops/
+PROJECT-MEMORY.md
+CLAUDE.md
+.run.lock
+.sweep.lock
+.classify.lock
+.aggregator.lock

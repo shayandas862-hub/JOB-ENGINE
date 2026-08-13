@@ -1,0 +1,32 @@
+.env
+.env.*
+!.env.example
+.venv/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+*.egg-info/
+.DS_Store
+data/local/
+.run.lock
+.sweep.lock
+.classify.lock
+ops/logs/
+ops/sweep-logs/
+ops/classify-logs/
+ops/run-logs/
+ops/*.log
+ops/cvs/
+# Snapshots of the OWNER'S OWN queue — which employers he is targeting, with
+# live application links. Operational output, not source, and the repo is
+# public-bound (Phase 8 task 6). Never tracked.
+ops/apply-shortlist.md
+ops/shortlist-*.md
+.sweep-stop
+.classify-stop
+ops/sweep-logs/
+ops/exports/
+.aggregator.lock
+.aggregator-stop
+ops/aggregator-logs/

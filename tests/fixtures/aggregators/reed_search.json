@@ -1,0 +1,35 @@
+{
+  "totalResults": 456,
+  "results": [
+    {
+      "jobId": 54123456,
+      "employerId": 12345,
+      "employerName": "Beta Data Ltd",
+      "employerProfileId": 6789,
+      "employerProfileName": "Beta Data",
+      "jobTitle": "Data Engineer",
+      "locationName": "Manchester",
+      "minimumSalary": 50000,
+      "maximumSalary": 60000,
+      "currency": "GBP",
+      "expirationDate": "01/08/2026",
+      "date": "05/07/2026",
+      "jobDescription": "Join our data platform team building pipelines. Snippet from Reed search.",
+      "applications": 12,
+      "jobUrl": "https://www.reed.co.uk/jobs/data-engineer/54123456"
+    },
+    {
+      "jobId": 54123457,
+      "employerId": 22222,
+      "employerName": "Gamma Cloud",
+      "jobTitle": "Data Engineer, Streaming",
+      "locationName": "London",
+      "minimumSalary": 70000,
+      "maximumSalary": 0,
+      "currency": "GBP",
+      "date": "06/07/2026",
+      "jobDescription": "Streaming data pipelines. Snippet.",
+      "jobUrl": "https://www.reed.co.uk/jobs/data-engineer-streaming/54123457"
+    }
+  ]
+}

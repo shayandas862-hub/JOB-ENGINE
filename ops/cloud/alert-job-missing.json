@@ -1,0 +1,36 @@
+{
+  "displayName": "goal-a-daily — NO run at all in ~24h",
+  "documentation": {
+    "content": "The daily pipeline has not completed a task attempt — success OR failure — in roughly 24 hours. It deliberately does not filter on result: a job that runs and fails is covered by the 'task attempt FAILED' policy, so this one answers only 'did it run at all'. This is the failure mode nobody thinks to watch and the one that would burn weeks: Cloud Scheduler silently stops firing, so NO failure ever occurs, so the failure alert never triggers — the queue just quietly goes stale while everything looks fine. Check Cloud Scheduler > goal-a-daily-morning first, then Cloud Run > Jobs > goal-a-daily.\n\nWhy a threshold and not a metric-absence condition: GCP caps absence duration at 23h30m, which is SHORTER than this job's 24h cycle — an absence condition would fire every single morning in the gap before the next run landed. Instead this sums completed attempts over a rolling 24h window and fires when that sum drops below 1, held for 30 minutes so a slightly late run does not flap the alert. Missing data is treated as breaching (EVALUATION_MISSING_DATA_ACTIVE), which is what catches the job disappearing entirely.",
+    "mimeType": "text/markdown"
+  },
+  "combiner": "OR",
+  "conditions": [
+    {
+      "displayName": "fewer than 1 completed attempt in the last 24h",
+      "conditionThreshold": {
+        "filter": "resource.type = \"cloud_run_job\" AND resource.labels.job_name = \"goal-a-daily\" AND metric.type = \"run.googleapis.com/job/completed_task_attempt_count\"",
+        "aggregations": [
+          {
+            "alignmentPeriod": "86400s",
+            "perSeriesAligner": "ALIGN_SUM",
+            "crossSeriesReducer": "REDUCE_SUM"
+          }
+        ],
+        "comparison": "COMPARISON_LT",
+        "thresholdValue": 1,
+        "duration": "1800s",
+        "trigger": {
+          "count": 1
+        },
+        "evaluationMissingData": "EVALUATION_MISSING_DATA_ACTIVE"
+      }
+    }
+  ],
+  "alertStrategy": {
+    "autoClose": "86400s"
+  },
+  "notificationChannels": [
+    "projects/goal-a-engine/notificationChannels/8641157315781203271"
+  ]
+}

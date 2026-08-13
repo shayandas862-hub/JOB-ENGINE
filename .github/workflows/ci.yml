@@ -1,0 +1,120 @@
+name: CI
+
+# THE PUBLIC SNAPSHOT'S ONLY WORKFLOW (B-GAE-035).
+#
+# The private repository's ci.yml has five jobs; two of them authenticate to
+# Google Cloud with credentials that deliberately do not exist in a public
+# repository, so shipping it verbatim failed every public run by construction
+# and put a red X on a portfolio built to demonstrate the opposite.
+#
+# What ships is an ALLOWLIST of the two lanes that need no credential at all:
+# the offline suite, and the database lane whose Postgres is created empty on
+# the runner and destroyed with it. A job added to the private workflow later
+# stays out of here by default — that is the whole point of writing the rule
+# as "these two may ship" rather than "those three may not", and
+# tests/test_public_workflow.py holds it shut.
+#
+# This file is installed by ops/flip/prepare-snapshot.sh as the snapshot's
+# .github/workflows/ci.yml. It is never hand-edited in the public repo: the
+# mirror is one-way and a hand edit dies at the next force-push (B-GAE-025).
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: public-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: Offline suite (Python 3.13)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          cache: pip
+          cache-dependency-path: requirements.lock
+
+      # The same lock the container image installs, so CI and the artefact
+      # test identically.
+      - name: Install locked dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install --no-cache-dir -r requirements.lock
+
+      # Offline by default: HTTP is mocked with `responses`, and the
+      # database tests self-skip unless RUN_DB_TESTS is set. If a test ever
+      # needs a credential here, that test is wrong.
+      - name: Run the offline suite
+        env:
+          PYTHONPATH: src
+        run: python -m pytest -q
+
+  database:
+    name: Suite against a real Postgres (RUN_DB_TESTS=1)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    services:
+      postgres:
+        # Match the major version the hosted database runs (measured with
+        # select version(): PostgreSQL 17.6). A different major would make
+        # this lane a test of the wrong database.
+        image: postgres:17
+        env:
+          POSTGRES_PASSWORD: ci-example-not-a-secret
+          POSTGRES_DB: goal_a
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd "pg_isready -U postgres -d goal_a"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 20
+    env:
+      # Worthless to anybody: this database is created empty on the runner and
+      # destroyed with it. The lane's whole value is that it builds the schema
+      # from the committed migration log instead of trusting one that already
+      # exists — so it must never point anywhere real.
+      DATABASE_URL: postgresql://postgres:ci-example-not-a-secret@localhost:5432/goal_a
+      PYTHONPATH: src
+      RUN_DB_TESTS: '1'
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+          cache: pip
+          cache-dependency-path: requirements.lock
+
+      - name: Install locked dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install --no-cache-dir -r requirements.lock
+
+      # Fail with a sentence rather than a confusing psql-not-found later.
+      - name: psql must be available to apply the schema
+        run: |
+          command -v psql >/dev/null || {
+            echo "psql is not on this runner; the schema cannot be applied" >&2
+            exit 1
+          }
+          psql --version
+
+      # bootstrap -> genesis -> every migration in filename order -> fixture.
+      # ON_ERROR_STOP is set inside the script, so a half-applied schema fails
+      # the job instead of quietly producing a database the tests misread.
+      - name: Build the schema from the committed migration log
+        run: ./ops/ci/apply-schema.sh
+
+      - name: Run the suite with the database tests ON
+        run: python -m pytest

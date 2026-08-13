@@ -1,0 +1,25 @@
+{
+  "kind": "search#companies",
+  "total_results": 2,
+  "items_per_page": 5,
+  "items": [
+    {
+      "title": "ACME AI LTD",
+      "company_number": "09876543",
+      "company_status": "active",
+      "company_type": "ltd",
+      "date_of_creation": "2015-03-01",
+      "address_snippet": "1 Silicon Way, London, EC1A 1AA",
+      "kind": "searchresults#company"
+    },
+    {
+      "title": "ACME AI GROUP LTD",
+      "company_number": "01234567",
+      "company_status": "dissolved",
+      "company_type": "ltd",
+      "date_of_creation": "2001-01-10",
+      "address_snippet": "2 Old Road, Leeds, LS1 1AA",
+      "kind": "searchresults#company"
+    }
+  ]
+}
